@@ -133,7 +133,6 @@ jobs:
         /usr/bin/cp -rf $GITHUB_WORKSPACE/900-arm64-dts-add-OpenWrt-DTS-files.patch.fixed ./target/linux/ipq807x/patches-5.10/900-arm64-dts-add-OpenWrt-DTS-files.patch
         git add .
         EDITOR=echo git revert --continue
-        git revert --continue
         ./scripts/feeds update -a
         ./scripts/feeds install -a
     - name: Run AutoBuild_DiyScript.sh
