@@ -53,4 +53,30 @@ Firmware_Diy() {
 		Copy ${CustomFiles}/d-team_newifi-d2_system ${base_files}/etc/config system
 	;;
 	esac
+	case "${OP_Maintainer}/${OP_REPO_NAME}:${OP_BRANCH}" in
+coolsnowwolf/lede:master)
+	AddPackage git other AutoBuild-Packages Hyy2001X master
+	AddPackage svn other luci-app-smartdns kenzok8/openwrt-packages/trunk
+	AddPackage svn other luci-app-socat Lienol/openwrt-package/trunk
+	AddPackage svn other luci-app-eqos kenzok8/openwrt-packages/trunk
+	AddPackage git other OpenClash vernesong master
+	AddPackage git other luci-app-adblock-plus small-5 master
+	AddPackage git other small kenzok8 master
+	AddPackage git other openwrt-packages kenzok8 master
+	# AddPackage git other OpenAppFilter destan19 master
+	# AddPackage svn other luci-app-ddnsto linkease/nas-packages/trunk/luci
+	# AddPackage svn other ddnsto linkease/nas-packages/trunk/network/services
+	
+	case "${TARGET_PROFILE}" in
+	asus_rt-acrh17 | d-team_newifi-d2 | xiaoyu_xy-c5)
+		AddPackage git other luci-app-usb3disable rufengsuixing master
+	;;
+	x86_64)
+		AddPackage git other openwrt-passwall xiaorouji main
+		rm -rf packages/lean/autocore
+		AddPackage git lean autocore-modify Hyy2001X master
+	;;
+	esac
+;;
+esac
 }
