@@ -49,8 +49,8 @@ Firmware_Diy() {
 
 	case "${TARGET_PROFILE}" in
 	d-team_newifi-d2)
-		patch -i ${CustomFiles}/mac80211_d-team_newifi-d2.patch package/kernel/mac80211/files/lib/wifi/mac80211.sh
-		Copy ${CustomFiles}/system_d-team_newifi-d2 ${base_files}/etc/config system
+		patch -i ${CustomFiles}/d-team_newifi-d2_mac80211.patch package/kernel/mac80211/files/lib/wifi/mac80211.sh
+		Copy ${CustomFiles}/d-team_newifi-d2_system ${base_files}/etc/config system
 	;;
 	esac
 }
