@@ -51,7 +51,7 @@ Firmware_Diy() {
 		AddPackage svn other luci-app-smartdns kenzok8/openwrt-packages/trunk
 		AddPackage svn other luci-app-socat Lienol/openwrt-package/trunk
 		AddPackage svn other luci-app-eqos kenzok8/openwrt-packages/trunk
-		AddPackage git other small-package kenzok8 master
+		AddPackage git other small-package kenzok8 main
 		AddPackage git other OpenClash vernesong master
 		AddPackage git other luci-app-ikoolproxy iwrt main
 		# AddPackage git other OpenAppFilter destan19 master
