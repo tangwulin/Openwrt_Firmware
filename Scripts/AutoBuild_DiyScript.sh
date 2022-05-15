@@ -40,43 +40,52 @@ Firmware_Diy() {
 	# ${FEEDS_PKG}			OpenWrt 源码目录下的 package/feeds/packages 目录
 	# ${BASE_FILES}			OpenWrt 源码目录下的 package/base-files/files 目录
 
-	case "${OP_Maintainer}/${OP_REPO_NAME}:${OP_BRANCH}" in
+	case "${OP_AUTHOR}/${OP_REPO}:${OP_BRANCH}" in
 	coolsnowwolf/lede:master)
-		sed -i "s?/bin/login?/usr/libexec/login.sh?g" ${feeds_pkgs}/ttyd/files/ttyd.config
-		sed -i "/DEVICE_COMPAT_VERSION := 1.1/d" target/linux/ramips/image/mt7621.mk
-	;;
-	esac
+		 #加回源码中的某些文件（懂的都懂）
+		sed -i "s?/bin/login?/usr/libexec/login.sh?g" ${FEEDS_PKG}/ttyd/files/ttyd.config
+		rm -rf $(PKG_Finder d "package feeds" luci-theme-argon)
+		AddPackage git lean luci-theme-argon jerrykuku 18.06
+		AddPackage git lean luci-app-argon-config jerrykuku master
+		AddPackage git other AutoBuild-Packages Hyy2001X master
+		AddPackage svn other luci-app-smartdns kenzok8/openwrt-packages/trunk
+		AddPackage svn other luci-app-socat Lienol/openwrt-package/trunk
+		AddPackage svn other luci-app-eqos kenzok8/openwrt-packages/trunk
+		AddPackage git other luci-app-adblock-plus small-5 master
+		AddPackage git other small-packages small-5 master
+		AddPackage git other OpenClash vernesong master
+		AddPackage git other luci-app-ikoolproxy iwrt main
+		# AddPackage git other OpenAppFilter destan19 master
+		# AddPackage svn other luci-app-ddnsto linkease/nas-packages/trunk/luci
+		# AddPackage svn other ddnsto linkease/nas-packages/trunk/network/services
+		AddPackage git other helloworld fw876 master
+		sed -i 's/143/143,8080,8443/' $(PKG_Finder d package luci-app-ssr-plus)/root/etc/init.d/shadowsocksr
+		patch < ${CustomFiles}/Patches/revert_remove-alterId-config.patch -p1 -d ${WORK}
+		patch < ${CustomFiles}/Patches/fix_ntfs3_antfs_conflict.patch -p1 -d ${WORK}
+		patch < ${CustomFiles}/Patches/fix_aria2_autocreate_path.patch -p1 -d ${WORK}
 
-	case "${TARGET_PROFILE}" in
-	d-team_newifi-d2)
-		patch -i ${CustomFiles}/d-team_newifi-d2_mac80211.patch package/kernel/mac80211/files/lib/wifi/mac80211.sh
-		Copy ${CustomFiles}/d-team_newifi-d2_system ${base_files}/etc/config system
+		case "${TARGET_PROFILE}" in
+		d-team_newifi-d2)
+			# patch < ${CustomFiles}/${TARGET_PROFILE}_mac80211.patch -p1 -d ${WORK}
+			Copy ${CustomFiles}/${TARGET_PROFILE}_system ${BASE_FILES}/etc/config system
+			sed -i "/DEVICE_COMPAT_VERSION := 1.1/d" target/linux/ramips/image/mt7621.mk
+			Copy ${CustomFiles}/fake-automount $(PKG_Finder d "package" automount)/files 15-automount
+		;;
+		xiaoyu_xy-c5)
+			Copy ${CustomFiles}/fake-automount $(PKG_Finder d "package" automount)/files 15-automount
+		;;
+		x86_64)
+			AddPackage git passwall-depends openwrt-passwall xiaorouji packages
+			AddPackage git passwall-luci openwrt-passwall xiaorouji luci
+			rm -rf packages/lean/autocore
+			AddPackage git lean autocore-modify Hyy2001X master
+			cat ${CustomFiles}/x86_64_kconfig >> ${WORK}/target/linux/x86/config-5.15
+		;;
+		esac
+	;;
+	immortalwrt/immortalwrt*)
+		sed -i "s?/bin/login?/usr/libexec/login.sh?g" ${FEEDS_PKG}/ttyd/files/ttyd.config
+		AddPackage git other AutoBuild-Packages Hyy2001X master
 	;;
 	esac
-	case "${OP_Maintainer}/${OP_REPO_NAME}:${OP_BRANCH}" in
-coolsnowwolf/lede:master)
-	AddPackage git other AutoBuild-Packages Hyy2001X master
-	AddPackage svn other luci-app-smartdns kenzok8/openwrt-packages/trunk
-	AddPackage svn other luci-app-socat Lienol/openwrt-package/trunk
-	AddPackage svn other luci-app-eqos kenzok8/openwrt-packages/trunk
-	AddPackage git other OpenClash vernesong master
-	AddPackage git other luci-app-adblock-plus small-5 master
-	AddPackage git other small kenzok8 master
-	AddPackage git other openwrt-packages kenzok8 master
-	# AddPackage git other OpenAppFilter destan19 master
-	# AddPackage svn other luci-app-ddnsto linkease/nas-packages/trunk/luci
-	# AddPackage svn other ddnsto linkease/nas-packages/trunk/network/services
-	
-	case "${TARGET_PROFILE}" in
-	asus_rt-acrh17 | d-team_newifi-d2 | xiaoyu_xy-c5)
-		AddPackage git other luci-app-usb3disable rufengsuixing master
-	;;
-	x86_64)
-		AddPackage git other openwrt-passwall xiaorouji main
-		rm -rf packages/lean/autocore
-		AddPackage git lean autocore-modify Hyy2001X master
-	;;
-	esac
-;;
-esac
 }
