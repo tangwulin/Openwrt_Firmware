@@ -41,8 +41,8 @@ Firmware_Diy() {
 	# ${BASE_FILES}			OpenWrt 源码目录下的 package/base-files/files 目录
 	
 	#添加登录背景
-	sudo -E mkdir -p ${Home}/files/www/luci-static/argonne/background
-	Copy ${CustomFiles}/background1.jpg ${Home}/files/www/luci-static/argonne/background background1.jpg
+	sudo -E mkdir -p /home/runner/work/Openwrt_Firmware/Openwrt_Firmware/openwrt/files/www/luci-static/argonne/background
+	Copy ${CustomFiles}/background1.jpg /home/runner/work/Openwrt_Firmware/Openwrt_Firmware/openwrt/files/www/luci-static/argonne/background background1.jpg
 
 	case "${OP_AUTHOR}/${OP_REPO}:${OP_BRANCH}" in
 	coolsnowwolf/lede:master)
