@@ -39,6 +39,10 @@ Firmware_Diy() {
 	# ${FEEDS_LUCI}			OpenWrt 源码目录下的 package/feeds/luci 目录
 	# ${FEEDS_PKG}			OpenWrt 源码目录下的 package/feeds/packages 目录
 	# ${BASE_FILES}			OpenWrt 源码目录下的 package/base-files/files 目录
+	
+	#添加登录背景
+	mkdir -p ${Home}/files/www/luci-static/argonne/background
+	Copy ${CustomFiles}/background1.jpg ${Home}/files/www/luci-static/argonne/background background1.jpg
 
 	case "${OP_AUTHOR}/${OP_REPO}:${OP_BRANCH}" in
 	coolsnowwolf/lede:master)
